@@ -5,14 +5,16 @@ import exceptions.errors.VendorNotFoundException;
 import interfaces.IVendorRepository;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory;
 
 @ApplicationScoped
 public class VendorRepository implements IVendorRepository {
-    @Inject
+
     SessionFactory sessionFactory;
+    public VendorRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Uni<Vendor> create(Vendor vendor) {
@@ -46,7 +48,7 @@ public class VendorRepository implements IVendorRepository {
                     vendor.getProductIds().clear();
                     return session.flush();
                 })
-                .call(vendor -> session.remove(vendor))
+                .call(session::remove)
                 .replaceWithVoid()
         );
     }

@@ -1,19 +1,20 @@
 package repositories;
 
 import entities.Buyer;
-import entities.User;
 import exceptions.errors.BuyerNotFoundException;
 import interfaces.IBuyerRepository;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory;
 
 @ApplicationScoped
 public class BuyerRepository implements IBuyerRepository {
-    @Inject
+
     SessionFactory sessionFactory;
+    public BuyerRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Uni<Buyer> create(Buyer buyer) {
@@ -47,7 +48,7 @@ public class BuyerRepository implements IBuyerRepository {
                     buyer.getOrderIds().clear();
                     return session.flush();
                 })
-                .call(buyer -> session.remove(buyer))
+                .call(session::remove)
                 .replaceWithVoid()
         );
     }

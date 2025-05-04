@@ -5,7 +5,6 @@ import exceptions.errors.AddressNotFoundException;
 import interfaces.IAddressRepository;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import java.util.List;
 
@@ -13,8 +12,11 @@ import org.hibernate.reactive.mutiny.Mutiny.SessionFactory;
 
 @ApplicationScoped
 public class AddressRepository implements IAddressRepository {
-    @Inject
+
     SessionFactory sessionFactory;
+    public AddressRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Uni<Address> create(Address address) {

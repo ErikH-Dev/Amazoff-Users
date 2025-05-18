@@ -3,6 +3,7 @@ package messaging;
 import entities.Buyer;
 import interfaces.IBuyerService;
 import io.smallrye.mutiny.Uni;
+import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.reactive.messaging.*;
 
@@ -16,9 +17,12 @@ public class BuyerEventHandler {
 
     @Incoming("get-buyer-requests")
     @Outgoing("get-buyer-responses")
-    public Uni<Message<Buyer>> handleGetBuyer(Message<String> msg) {
-        int oauthId = Integer.parseInt(msg.getPayload());
+    public Uni<Message<JsonObject>> handleGetBuyer(Message<JsonObject> msg) {
+        int oauthId = msg.getPayload().getInteger("oauthId");
         return buyerService.read(oauthId)
-            .onItem().transform(msg::withPayload);
+            .onItem().transform(buyer -> {
+                JsonObject response = JsonObject.mapFrom(buyer);
+                return Message.of(response);
+            });
     }
 }

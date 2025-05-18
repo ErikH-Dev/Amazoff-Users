@@ -3,6 +3,7 @@ package messaging;
 import entities.Vendor;
 import interfaces.IVendorService;
 import io.smallrye.mutiny.Uni;
+import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.reactive.messaging.*;
 
@@ -16,9 +17,12 @@ public class VendorEventHandler {
 
     @Incoming("get-vendor-requests")
     @Outgoing("get-vendor-responses")
-    public Uni<Message<Vendor>> handleGetVendor(Message<String> msg) {
-        int oauthId = Integer.parseInt(msg.getPayload());
+    public Uni<Message<JsonObject>> handleGetVendor(Message<JsonObject> msg) {
+        int oauthId = msg.getPayload().getInteger("oauthId");
         return vendorService.read(oauthId)
-            .onItem().transform(msg::withPayload);
+            .onItem().transform(vendor -> {
+                JsonObject response = JsonObject.mapFrom(vendor);
+                return Message.of(response);
+            });
     }
 }

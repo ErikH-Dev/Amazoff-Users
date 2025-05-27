@@ -13,6 +13,7 @@ public class BuyerEventHandler {
 
     private static final Logger LOG = Logger.getLogger(BuyerEventHandler.class);
     IBuyerService buyerService;
+    
     public BuyerEventHandler(IBuyerService buyerService) {
         this.buyerService = buyerService;
     }
@@ -30,9 +31,14 @@ public class BuyerEventHandler {
                 MDC.remove("buyerId");
                 return Message.of(response);
             })
-            .onFailure().invoke(e -> {
+            .onFailure().recoverWithItem(e -> {
                 LOG.errorf("Failed to handle get-buyer request: %s", e.getMessage());
+                JsonObject errorResponse = new JsonObject()
+                        .put("error", true)
+                        .put("message", "Buyer not found")
+                        .put("oauthId", oauthId);
                 MDC.remove("buyerId");
+                return Message.of(errorResponse);
             });
     }
 }

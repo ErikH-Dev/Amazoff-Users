@@ -15,10 +15,9 @@ quarkus:
   smallrye-health:
     root-path: /q/health
 
-  # Enable management endpoints
+  # Disable separate management interface - keep everything on main port
   management:
-    enabled: true
-    root-path: /q
+    enabled: false
 
 # Micrometer configuration for Prometheus
 micrometer:

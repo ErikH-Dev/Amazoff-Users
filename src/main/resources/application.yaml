@@ -24,6 +24,27 @@ micrometer:
       enabled: true
       path: /q/metrics
 
+mp:
+  messaging:
+    incoming:
+      get-buyer-requests:
+        connector: smallrye-rabbitmq
+      get-vendor-requests:
+        connector: smallrye-rabbitmq        
+    outgoing:
+      get-buyer-responses:
+        connector: smallrye-rabbitmq
+      get-vendor-responses:
+        connector: smallrye-rabbitmq
+
+    # Global RabbitMQ connector configuration with environment variable overrides
+    connector:
+      smallrye-rabbitmq:
+        username: ${RABBITMQ_USERNAME:guest}
+        password: ${RABBITMQ_PASSWORD:guest}
+        host: ${RABBITMQ_HOST:localhost}
+        port: ${RABBITMQ_PORT:5672}
+    
 # Development profile configuration
 "%dev":
   quarkus:
@@ -42,6 +63,16 @@ micrometer:
     log:
       console:
         level: DEBUG
+
+  # Override RabbitMQ settings for development
+  mp:
+    messaging:
+      connector:
+        smallrye-rabbitmq:
+          username: guest
+          password: guest
+          host: localhost
+          port: 5672
 
 # Test profile configuration
 "%test":

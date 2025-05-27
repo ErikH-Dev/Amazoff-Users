@@ -6,8 +6,6 @@ quarkus:
     name: amazoff-users
 
   hibernate-orm:
-    log:
-      sql: false
     database:
       generation: update
 
@@ -38,7 +36,6 @@ micrometer:
     hibernate-orm:
       log:
         sql: true
-      sql-load-script: import.sql
       reactive:
         database:
           generation: drop-and-create
@@ -57,7 +54,6 @@ micrometer:
       username: sa
       password: ""
     hibernate-orm:
-      sql-load-script: import.sql
       reactive:
         database:
           generation: drop-and-create

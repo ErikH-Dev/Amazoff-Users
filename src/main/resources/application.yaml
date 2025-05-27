@@ -15,6 +15,11 @@ quarkus:
   smallrye-health:
     root-path: /q/health
 
+  # Enable management endpoints
+  management:
+    enabled: true
+    root-path: /q
+
 # Micrometer configuration for Prometheus
 micrometer:
   export:
@@ -75,18 +80,10 @@ micrometer:
         generation: update
     log:
       console:
-        level: DEBUG
+        level: INFO
 
     swagger-ui:
       always-include: true
       path: /q/swagger-ui
     smallrye-openapi:
       path: /q/openapi
-
-    management:
-      enabled: true
-      endpoints:
-        enabled: true
-        web:
-          exposure: metrics,health
-          base-path: /q

@@ -1,78 +1,121 @@
 package entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "App_Address")
+@Table(name = "Address")
 public class Address {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "oauth_id", nullable = false)
-    @JsonProperty("oauth_id")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "oauth_id")
-    @JsonIdentityReference(alwaysAsId = true)
-    private Buyer buyer;
+    @NotNull(message = "Keycloak ID must not be null")
+    @Column(name = "keycloak_id", nullable = false)
+    @JsonProperty("keycloak_id")
+    private String keycloakId;
 
-    @NotBlank(message = "Street must not be blank")
+    @NotNull(message = "Street must not be null")
     @Size(max = 255, message = "Street must not exceed 255 characters")
-    @JsonProperty("street")
+    @Column(nullable = false, length = 255)
     private String street;
 
-    @NotBlank(message = "City must not be blank")
+    @NotNull(message = "City must not be null")
     @Size(max = 100, message = "City must not exceed 100 characters")
-    @JsonProperty("city")
+    @Column(nullable = false, length = 100)
     private String city;
 
-    @NotBlank(message = "State must not be blank")
-    @Size(max = 100, message = "State must not exceed 100 characters")
-    @JsonProperty("state")
+    @NotNull(message = "State must not be null")
+    @Size(max = 50, message = "State must not exceed 50 characters")
+    @Column(nullable = false, length = 50)
     private String state;
 
-    @NotBlank(message = "Postal code must not be blank")
-    @Size(max = 20, message = "Postal code must not exceed 20 characters")
-    @Column(name = "postal_code")
-    @JsonProperty("postal_code")
-    private String postalCode;
+    @NotNull(message = "Zip code must not be null")
+    @Size(max = 20, message = "Zip code must not exceed 20 characters")
+    @Column(name = "zip_code", nullable = false, length = 20)
+    private String zipCode;
 
-    @NotBlank(message = "Country must not be blank")
-    @Size(max = 100, message = "Country must not exceed 100 characters")
-    @JsonProperty("country")
+    @NotNull(message = "Country must not be null")
+    @Size(max = 50, message = "Country must not exceed 50 characters")
+    @Column(nullable = false, length = 50)
     private String country;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "keycloak_id", referencedColumnName = "keycloakId", insertable = false, updatable = false)
+    private Buyer buyer;
+
+    // Default constructor for JPA
     public Address() {
     }
 
-    public Address(Buyer buyer, String street, String city, String state, String postalCode, String country) {
-        this.buyer = buyer;
+    // Constructor
+    public Address(String keycloakId, String street, String city, String state, String zipCode, String country) {
+        this.keycloakId = keycloakId;
         this.street = street;
         this.city = city;
         this.state = state;
-        this.postalCode = postalCode;
+        this.zipCode = zipCode;
         this.country = country;
     }
 
-    public Address(int id, Buyer buyer, String street, String city, String state, String postalCode, String country) {
-        this.id = id;
-        this.buyer = buyer;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.postalCode = postalCode;
-        this.country = country;
-    }
-
+    // Getters and Setters
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getKeycloakId() {
+        return keycloakId;
+    }
+
+    public void setKeycloakId(String keycloakId) {
+        this.keycloakId = keycloakId;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public Buyer getBuyer() {
@@ -83,23 +126,16 @@ public class Address {
         this.buyer = buyer;
     }
 
-    public String getStreet() {
-        return street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public String getCountry() {
-        return country;
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", keycloakId='" + keycloakId + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }

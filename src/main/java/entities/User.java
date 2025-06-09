@@ -11,26 +11,17 @@ import jakarta.validation.constraints.*;
 @Table(name = "App_User")
 public abstract class User {
     @Id
-    @NotNull(message = "OAuth ID must not be null")
-    @JsonProperty("oauth_id")
-    private int oauthId;
-
-    @NotNull(message = "OAuth provider must not be null")
-    @JsonProperty("oauth_provider")
-    private int oauthProvider;
+    @NotNull(message = "Keycloak ID must not be null")
+    @JsonProperty("keycloak_id")
+    private String keycloakId;
 
     protected User() {}
 
-    protected User(int oauthId, int oauthProvider) {
-        this.oauthId = oauthId;
-        this.oauthProvider = oauthProvider;
+    protected User(String keycloakId) {
+        this.keycloakId = keycloakId;
     }
 
-    public int getOauthId() {
-        return oauthId;
-    }
-
-    public int getOauthProvider() {
-        return oauthProvider;
+    public String getKeycloakId() {
+        return keycloakId;
     }
 }

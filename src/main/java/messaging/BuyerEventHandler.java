@@ -21,12 +21,12 @@ public class BuyerEventHandler {
     @Incoming("get-buyer-requests")
     @Outgoing("get-buyer-responses")
     public Uni<Message<JsonObject>> handleGetBuyer(Message<JsonObject> msg) {
-        int oauthId = msg.getPayload().getInteger("oauthId");
-        MDC.put("buyerId", oauthId);
-        LOG.infof("Handling get-buyer request: oauthId=%d", oauthId);
-        return buyerService.read(oauthId)
+        String keycloakId = msg.getPayload().getString("keycloakId");
+        MDC.put("buyerId", keycloakId);
+        LOG.infof("Handling get-buyer request: keycloakId=%s", keycloakId);
+        return buyerService.read(keycloakId)
             .onItem().transform(buyer -> {
-                LOG.infof("Returning buyer for oauthId=%d", oauthId);
+                LOG.infof("Returning buyer for keycloakId=%s", keycloakId);
                 JsonObject response = JsonObject.mapFrom(buyer);
                 MDC.remove("buyerId");
                 return Message.of(response);
@@ -36,7 +36,7 @@ public class BuyerEventHandler {
                 JsonObject errorResponse = new JsonObject()
                         .put("error", true)
                         .put("message", "Buyer not found")
-                        .put("oauthId", oauthId);
+                        .put("keycloakId", keycloakId);
                 MDC.remove("buyerId");
                 return Message.of(errorResponse);
             });

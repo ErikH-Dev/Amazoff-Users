@@ -9,6 +9,6 @@ public interface IAddressRepository {
     Uni<Address> create(Address address);
     Uni<Address> update(Address address);
     Uni<Void> delete(int id);
-    Uni<List<Address>> readAllByUser(int userId);
-    Uni<Address> readById(int id);
+    Uni<List<Address>> readAllByUser(String keycloakId);
+    Uni<Address> findById(int id);
 }

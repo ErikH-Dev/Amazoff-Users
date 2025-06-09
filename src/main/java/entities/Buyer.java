@@ -55,15 +55,15 @@ public class Buyer extends User {
 
     public Buyer() {}
 
-    public Buyer(int oauthId, int oauthProvider, String firstName, String lastName, String email) {
-        super(oauthId, oauthProvider);
+    public Buyer(String keycloakId, String firstName, String lastName, String email) {
+        super(keycloakId);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public Buyer(int oauthId, int oauthProvider, String firstName, String lastName, String email, List<Address> addresses, List<Integer> orderIds) {
-        super(oauthId, oauthProvider);
+    public Buyer(String keycloakId, String firstName, String lastName, String email, List<Address> addresses, List<Integer> orderIds) {
+        super(keycloakId);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

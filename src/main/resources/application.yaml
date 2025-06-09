@@ -29,8 +29,10 @@ mp:
     incoming:
       get-buyer-requests:
         connector: smallrye-rabbitmq
+        auto-acknowledgment: true
       get-vendor-requests:
-        connector: smallrye-rabbitmq        
+        connector: smallrye-rabbitmq
+        auto-acknowledgment: true
     outgoing:
       get-buyer-responses:
         connector: smallrye-rabbitmq

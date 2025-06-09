@@ -21,12 +21,12 @@ public class VendorEventHandler {
     @Incoming("get-vendor-requests")
     @Outgoing("get-vendor-responses")
     public Uni<Message<JsonObject>> handleGetVendor(Message<JsonObject> msg) {
-        int oauthId = msg.getPayload().getInteger("oauthId");
-        MDC.put("vendorId", oauthId);
-        LOG.infof("Handling get-vendor request: oauthId=%d", oauthId);
-        return vendorService.read(oauthId)
+        String keycloakId = msg.getPayload().getString("keycloakId");
+        MDC.put("vendorId", keycloakId);
+        LOG.infof("Handling get-vendor request: keycloakId=%s", keycloakId);
+        return vendorService.read(keycloakId)
                 .onItem().transform(vendor -> {
-                    LOG.infof("Returning vendor for oauthId=%d", oauthId);
+                    LOG.infof("Returning vendor for keycloakId=%s", keycloakId);
                     JsonObject response = JsonObject.mapFrom(vendor);
                     MDC.remove("vendorId");
                     return Message.of(response);
@@ -36,7 +36,7 @@ public class VendorEventHandler {
                     JsonObject errorResponse = new JsonObject()
                             .put("error", true)
                             .put("message", "Vendor not found")
-                            .put("oauthId", oauthId);
+                            .put("keycloakId", keycloakId);
                     MDC.remove("vendorId");
                     return Message.of(errorResponse);
                 });

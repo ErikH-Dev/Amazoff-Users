@@ -33,27 +33,17 @@ public class AddressRepository implements IAddressRepository {
     }
 
     @Override
-    public Uni<List<Address>> readAllByUser(int oauthId) {
-        LOG.debugf("Fetching all addresses for user: oauthId=%d", oauthId);
-        return sessionFactory.withSession(session -> 
-            session.createQuery("SELECT a FROM Address a WHERE a.buyer.oauthId = :oauthId", Address.class)
-                .setParameter("oauthId", oauthId)
+    public Uni<List<Address>> readAllByUser(String keycloakId) {
+        LOG.debugf("Fetching all addresses for user: keycloakId=%s", keycloakId);
+        return sessionFactory.withSession(session ->
+            session.createQuery("SELECT a FROM Address a WHERE a.buyer.keycloakId = :keycloakId", Address.class)
+                .setParameter("keycloakId", keycloakId)
                 .getResultList()
-        ).onItem().invoke(list -> LOG.debugf("Fetched %d addresses for user: oauthId=%d", list.size(), oauthId))
+        ).onItem().invoke(list -> LOG.debugf("Fetched %d addresses for user: keycloakId=%s", list.size(), keycloakId))
         .onFailure().invoke(e -> {
             LOG.errorf("Failed to retrieve addresses: %s", e.getMessage());
             throw new RuntimeException("Failed to retrieve addresses: " + e.getMessage(), e);
         });
-    }
-
-    @Override
-    public Uni<Address> readById(int id) {
-        LOG.debugf("Fetching address from DB: addressId=%d", id);
-        return sessionFactory.withSession(session -> session.find(Address.class, id))
-            .onItem().invoke(a -> {
-                if (a != null) LOG.debugf("Address fetched: addressId=%d", a.getId());
-            })
-            .onItem().ifNull().failWith(() -> new AddressNotFoundException(id));
     }
 
     @Override
@@ -68,17 +58,22 @@ public class AddressRepository implements IAddressRepository {
 
     @Override
     public Uni<Void> delete(int id) {
-        LOG.debugf("Deleting address from DB: addressId=%d", id);
-        return sessionFactory.withTransaction(session -> session.find(Address.class, id)
-            .onItem().ifNull().failWith(() -> new AddressNotFoundException(id))
-            .onItem().ifNotNull().call(address -> {
-                if (address.getBuyer() != null) {
-                    address.getBuyer().getAddresses().remove(address);
-                    address.setBuyer(null);
-                }
-                return session.remove(address);
-            })
-            .replaceWithVoid())
-            .invoke(() -> LOG.debugf("Address deleted from DB: addressId=%d", id));
+        LOG.debugf("Deleting address: addressId=%d", id);
+        return sessionFactory.withTransaction(session -> 
+            session.find(Address.class, id)
+                .onItem().ifNull().failWith(() -> new AddressNotFoundException(id))
+                .onItem().ifNotNull().transformToUni(found -> session.remove(found))
+        ).onItem().invoke(() -> LOG.debugf("Address deleted: addressId=%d", id))
+          .onFailure().invoke(e -> LOG.errorf("Failed to delete address: %s", e.getMessage()));
+    }
+
+    @Override
+    public Uni<Address> findById(int id) {
+        LOG.debugf("Fetching address by id: addressId=%d", id);
+        return sessionFactory.withSession(session -> 
+            session.find(Address.class, id)
+                .onItem().ifNull().failWith(() -> new AddressNotFoundException(id))
+        ).onItem().invoke(a -> LOG.debugf("Fetched address: addressId=%d", a.getId()))
+          .onFailure().invoke(e -> LOG.errorf("Failed to retrieve address: %s", e.getMessage()));
     }
 }

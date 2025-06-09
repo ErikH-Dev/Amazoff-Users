@@ -30,13 +30,13 @@ public class Vendor extends User {
 
     public Vendor() {}
 
-    public Vendor(int oauthId, int oauthProvider, String storeName) {
-        super(oauthId, oauthProvider);
+    public Vendor(String keycloakId, String storeName) {
+        super(keycloakId);
         this.storeName = storeName;
     }
 
-    public Vendor(int oauthId, int oauthProvider, String storeName, List<Integer> productIds) {
-        super(oauthId, oauthProvider);
+    public Vendor(String keycloakId, String storeName, List<Integer> productIds) {
+        super(keycloakId);
         this.storeName = storeName;
         this.productIds = productIds;
     }

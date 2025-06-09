@@ -5,7 +5,6 @@ import interfaces.IBuyerService;
 import utils.JwtUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Validator;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;

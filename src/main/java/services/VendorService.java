@@ -1,13 +1,10 @@
 package services;
 
-import dtos.CreateVendorRequest;
-import dtos.UpdateVendorRequest;
 import entities.Vendor;
 import interfaces.IVendorRepository;
 import interfaces.IVendorService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.validation.Valid;
 
 import org.jboss.logging.Logger;
 import org.jboss.logging.MDC;

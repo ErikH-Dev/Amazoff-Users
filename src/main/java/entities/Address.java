@@ -44,7 +44,7 @@ public class Address {
     private String country;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "keycloak_id", referencedColumnName = "keycloakId", insertable = false, updatable = false)
+    @JoinColumn(name = "keycloak_id", referencedColumnName = "keycloak_id", insertable = false, updatable = false)
     private Buyer buyer;
 
     // Default constructor for JPA

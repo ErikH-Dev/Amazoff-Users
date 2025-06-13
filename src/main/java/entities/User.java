@@ -13,6 +13,7 @@ public abstract class User {
     @Id
     @NotNull(message = "Keycloak ID must not be null")
     @JsonProperty("keycloak_id")
+    @Column(name = "keycloak_id")
     private String keycloakId;
 
     protected User() {}

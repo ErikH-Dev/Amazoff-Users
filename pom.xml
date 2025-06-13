@@ -56,6 +56,12 @@
             <artifactId>quarkus-reactive-pg-client</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.7</version>
+        </dependency>
+
         <!-- Persistence: Hibernate Reactive -->
         <dependency>
             <groupId>org.hibernate.reactive</groupId>
@@ -118,10 +124,6 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
 
         <!-- Mockito JUnit Jupiter Integration -->

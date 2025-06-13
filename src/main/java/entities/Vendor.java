@@ -13,7 +13,7 @@ import jakarta.validation.constraints.*;
 @Entity
 @Table(name = "App_Vendor")
 @DiscriminatorValue("VENDOR")
-@PrimaryKeyJoinColumn(name = "oauth_id")
+@PrimaryKeyJoinColumn(name = "keycloak_id")
 public class Vendor extends User {
     @NotBlank(message = "Store name must not be blank")
     @Size(max = 100, message = "Store name must not exceed 100 characters")

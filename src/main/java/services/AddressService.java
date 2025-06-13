@@ -22,7 +22,7 @@ public class AddressService implements IAddressService {
 
     @Override
     public Uni<Address> create(Address address) {
-        LOG.infof("Creating address for oauthId=%d", address.getKeycloakId());
+        LOG.infof("Creating address for keycloakId=%d", address.getKeycloakId());
         return addressRepository.create(address)
             .invoke(created -> {
                 MDC.put("addressId", created.getId());

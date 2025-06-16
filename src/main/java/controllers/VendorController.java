@@ -29,7 +29,7 @@ public class VendorController {
     public Uni<Response> createVendor() {
         Vendor vendor = new Vendor(
             jwtUtil.getCurrentKeycloakUserId(),
-            jwtUtil.getCurrentStoreName()
+            jwtUtil.getCurrentUserName()
         );
 
         MDC.put("keycloakId", vendor.getKeycloakId());
@@ -69,7 +69,7 @@ public class VendorController {
     public Uni<Response> updateCurrentVendor() {
         Vendor vendor = new Vendor(
             jwtUtil.getCurrentKeycloakUserId(),
-            jwtUtil.getCurrentStoreName()
+            jwtUtil.getCurrentUserName()
         );
 
         MDC.put("keycloakId", vendor.getKeycloakId());

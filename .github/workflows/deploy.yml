@@ -56,7 +56,7 @@ jobs:
       uses: azure/aks-set-context@v3
       with:
         resource-group: amazoff-rg
-        cluster-name: amazoff-cluser
+        cluster-name: amazoff-cluster
 
     - name: Rollout restart deployment
       run: |

@@ -18,6 +18,7 @@ public class BuyerController {
     private IBuyerService buyerService;
     private JwtUtil jwtUtil;
 
+    
     public BuyerController(IBuyerService buyerService, JwtUtil jwtUtil) {
         this.buyerService = buyerService;
         this.jwtUtil = jwtUtil;
